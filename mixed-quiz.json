@@ -1,0 +1,28 @@
+{
+  "quizId": "test001",
+  "title": "Compatibility test",
+  "extraField": "This should be ignored",
+  "pages": [
+    {
+      "timeLimit": 20,
+      "elements": [
+        {
+          "type": "text",
+          "name": "q1",
+          "title": "Enter some text."
+        }
+      ]
+    },
+    {
+      "timeLimit": 15,
+      "elements": [
+        {
+          "type": "boolean",
+          "name": "q2",
+          "title": "Java is a statically typed programming language.",
+          "correctAnswer": true
+        }
+      ]
+    }
+  ]
+}

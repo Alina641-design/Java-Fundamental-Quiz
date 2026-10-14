@@ -14,7 +14,8 @@
 
     <Label text="Quiz Game"/>
     <Label fx:id="statusLabel" text="No quiz loaded" wrapText="true"/>
-    <Button text="Load quiz" prefWidth="200.0"/>
-    <Button text="Start quiz" prefWidth="200.0"
-            onAction="#onStartQuizClick"/>
+    <Button text="Load quiz" prefWidth="200.0"
+            onAction="#onLoadQuizClick"/>
+    <Button fx:id="startButton" text="Start quiz" prefWidth="200.0"
+            disable="true" onAction="#onStartQuizClick"/>
 </VBox>
