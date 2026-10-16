@@ -15,11 +15,15 @@
     </padding>
 
     <Label fx:id="playerNameLabel"/>
+    <Label fx:id="scoreLabel" text="Score: 0" />
     <Label text="Question 1"/>
     <Label fx:id="questionTitleLabel" wrapText="true" maxWidth="600.0"/>
 
     <VBox fx:id="answerBox" alignment="CENTER_LEFT"
           spacing="10.0" maxWidth="400.0"/>
+
+    <Button fx:id="submitAnswerButton" text="Submit Answer"
+            prefWidth="200.0" onAction="#onSubmitAnswerClick"/>
 
     <Button text="Finish quiz" prefWidth="200.0"
             onAction="#onFinishQuizClick"/>

@@ -1,4 +1,5 @@
 package nl.inholland.quizgame.model;
+import java.util.List;
 
 public class BooleanQuestion extends Question {
     private String labelTrue;
@@ -19,5 +20,16 @@ public class BooleanQuestion extends Question {
     }
     public boolean getCorrectAnswer() {
         return corectAnswer;
+    }
+
+    @Override
+    protected boolean isCorrectAnswer(Object answer) {
+        return Boolean.valueOf(getCorrectAnswer()).equals(answer);
+    }
+    @Override
+    public List<AnswerOption> getAnswerOptions() {
+        return List.of(
+                new AnswerOption(labelTrue, true),
+                new AnswerOption(labelFalse, false));
     }
 }

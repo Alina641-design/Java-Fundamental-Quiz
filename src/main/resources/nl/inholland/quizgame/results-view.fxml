@@ -14,7 +14,8 @@
 
     <Label text="Results"/>
     <Label text="Quiz finished."/>
-    <Label text="Score: —"/>
+    <Label fx:id="playerNameLabel"/>
+    <Label fx:id="scoreLabel"/>
 
     <Button fx:id="menuButton" text="Back to Menu"
             prefWidth="200.0" onAction="#onBackToMenuClick"/>

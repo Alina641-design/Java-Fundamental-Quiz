@@ -1,4 +1,5 @@
 package nl.inholland.quizgame;
+import nl.inholland.quizgame.service.GameManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,13 +10,9 @@ import java.net.URL;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
-import nl.inholland.quizgame.model.BooleanQuestion;
-import nl.inholland.quizgame.model.MultipleChoiceQuestion;
 import nl.inholland.quizgame.model.Question;
-import nl.inholland.quizgame.model.Quiz;
-
-import java.util.Collections;
-import java.util.List;
+import javafx.scene.control.Button;
+import nl.inholland.quizgame.model.AnswerOption;
 
 public class GameController {
     @FXML
@@ -25,8 +22,16 @@ public class GameController {
     @FXML
     private VBox answerBox;
     private final ToggleGroup answerGroup = new ToggleGroup();
-    public void setPlayerName(String playerName) {
-        playerNameLabel.setText("Player: " + playerName);
+    @FXML
+    private Label scoreLabel;
+    @FXML
+    private Button submitAnswerButton;
+    @FXML
+    private void initialize() {
+        GameManager manager = GameManager.getInstance();
+        playerNameLabel.setText("Player: " + manager.getPlayerName());
+        scoreLabel.textProperty().bind(manager.scoreProperty().asString("Score: %d"));
+        showCurrentQuestion();
     }
     @FXML
     private void onFinishQuizClick(){
@@ -43,35 +48,48 @@ public class GameController {
             alert.showAndWait();
         }
     }
-    public void setQuiz(Quiz quiz) {
-        Question question = quiz.getPages().get(0).getQuestion();
+    private void showCurrentQuestion() {
+        Question question = GameManager.getInstance().getCurrentQuestion();
         questionTitleLabel.setText(question.getTitle());
         answerBox.getChildren().clear();
         answerGroup.getToggles().clear();
-        if (question instanceof MultipleChoiceQuestion) {
-            showMulipleChoice((MultipleChoiceQuestion) question);
-        }else if (question instanceof BooleanQuestion) {
-            showBoolean((BooleanQuestion) question);
+        answerBox.setDisable(false);
+        submitAnswerButton.setDisable(false);
+        for (AnswerOption option : question.getAnswerOptions()) {
+            addAnswer(option.getText(), option.getValue());
         }
     }
-    private void showMulipleChoice(MultipleChoiceQuestion question) {
-        List<String> choices = question.getChoices();
-        if ("random".equals(question.getChoicesOrder())) {
-            Collections.shuffle(choices);
-        }
-        for (String choice : choices) {
-            addAnswer(choice, choice);
-        }
-    }
-    private void showBoolean(BooleanQuestion question) {
-        addAnswer(question.getLabelTrue(), true);
-        addAnswer(question.getLabelFalse(), false);
-    }
+
     private void addAnswer(String text, Object value) {
         RadioButton button = new RadioButton(text);
         button.setWrapText(true);
         button.setToggleGroup(answerGroup);
         button.setUserData(value);
         answerBox.getChildren().add(button);
+    }
+    @FXML
+    private void onSubmitAnswerClick() {
+        Object answer = getSelectedAnswer();
+        GameManager manager = GameManager.getInstance();
+        if (answer == null && manager.getCurrentQuestion().isRequired()) {
+            showAnswerWarning();
+            return;
+        }
+        manager.submitAnswer(answer);
+        answerBox.setDisable(true);
+        submitAnswerButton.setDisable(true);
+    }
+
+    private Object getSelectedAnswer() {
+        if (answerGroup.getSelectedToggle() == null) {
+            return null;
+        }
+        return answerGroup.getSelectedToggle().getUserData();
+    }
+
+    private void showAnswerWarning() {
+        Alert alert = new Alert(Alert.AlertType.WARNING, "Select an answer first.");
+        alert.initOwner(answerBox.getScene().getWindow());
+        alert.showAndWait();
     }
 }

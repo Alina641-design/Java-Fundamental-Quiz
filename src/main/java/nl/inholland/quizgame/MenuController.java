@@ -7,10 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
-import javafx.stage.FileChooser;
 import nl.inholland.quizgame.model.Quiz;
 import nl.inholland.quizgame.service.QuizLoader;
-import nl.inholland.quizgame.service.QuizLoader;
+import nl.inholland.quizgame.service.GameManager;
 
 import java.io.File;
 
@@ -59,11 +58,11 @@ public class MenuController {
 
     private void openGame(String playerName) {
         try {
+            GameManager manager = GameManager.getInstance();
+            manager.setPlayerName(playerName);
+            manager.setQuiz(loadedQuiz);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("game-view.fxml"));
             Parent root = loader.load();
-            GameController controller = loader.getController();
-            controller.setPlayerName(playerName);
-            controller.setQuiz(loadedQuiz);
             statusLabel.getScene().setRoot(root);
         } catch (IOException e) {
             statusLabel.setText("Error occurred while opening the game.");

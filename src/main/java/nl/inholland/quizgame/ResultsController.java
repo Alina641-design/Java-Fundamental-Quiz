@@ -6,10 +6,24 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import java.io.IOException;
 import java.net.URL;
+import javafx.scene.control.Label;
+import nl.inholland.quizgame.service.GameManager;
 
 public class ResultsController {
     @FXML
     private Button menuButton;
+    @FXML
+    private Label playerNameLabel;
+
+    @FXML
+    private Label scoreLabel;
+
+    @FXML
+    private void initialize() {
+        GameManager manager = GameManager.getInstance();
+        playerNameLabel.setText("Player: " + manager.getPlayerName());
+        scoreLabel.setText("Score: " + manager.getScore());
+    }
     @FXML
     private void onBackToMenuClick() {
         try {

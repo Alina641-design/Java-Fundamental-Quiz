@@ -1,6 +1,7 @@
 package nl.inholland.quizgame.model;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class MultipleChoiceQuestion extends Question {
     private List<String> choices;
@@ -20,5 +21,22 @@ public class MultipleChoiceQuestion extends Question {
     }
     public String getCorrectAnswer() {
         return correctAnswer;
+    }
+
+    @Override
+    protected boolean isCorrectAnswer(Object answer) {
+        return correctAnswer.equals(answer);
+    }
+    @Override
+    public List<AnswerOption> getAnswerOptions() {
+        List<String> answerChoices = getChoices();
+        if ("random".equals(choicesOrder)) {
+            Collections.shuffle(answerChoices);
+        }
+        List<AnswerOption> options = new ArrayList<>();
+        for (String choice : answerChoices) {
+            options.add(new AnswerOption(choice, choice));
+        }
+        return options;
     }
 }
